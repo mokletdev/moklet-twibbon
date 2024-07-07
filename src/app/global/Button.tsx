@@ -24,7 +24,7 @@ const buttonVariants = cva(
           "text-base px-6 py-3 text-primary-400 bg-white hover:bg-primary-50 disabled:bg-neutral-400 disabled:text-white",
       },
     },
-  },
+  }
 );
 
 interface LinkButtonProps
@@ -47,7 +47,7 @@ interface ButtonProps
   className?: string;
 }
 
-export default function LinkButton({
+export function LinkButton({
   children,
   href,
   variant,

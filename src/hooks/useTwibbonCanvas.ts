@@ -1,12 +1,8 @@
-/* For some reasons, property 'name' does not exist in any 
-of the fabric related type even though it exists, so we'll have to use any */
-
 import * as fabric from "fabric";
 import {
   Dispatch,
   Ref,
   SetStateAction,
-  useCallback,
   useEffect,
   useRef,
   useState,
@@ -33,122 +29,141 @@ export const useTwibbonCanvas = (): UseTwibbonHookRes => {
   const [frameUrl, setFrameUrl] = useState<string>();
   const [lastTwb, setLastTwb] = useState<string>();
   const [scaled, setScaled] = useState<number>(0.5);
+
   const [recommendedSize, setRecommendedSize] = useState<{
     height: number;
     width: number;
-  }>({ height: 500, width: 500 });
+  }>({
+    height: 500,
+    width: 500,
+  });
+
   const [fabricCanvas, setFabricCanvas] = useState<fabric.Canvas>();
-  const isMd = useMediaQuery({ query: "(min-width: 768px)" });
+  const isMd = useMediaQuery({
+    query: "(min-width: 768px)",
+  });
 
-  useEffect(() => {
-    const oldFabricObject = fabric.FabricObject.prototype.toObject;
-    fabric.FabricObject.prototype.toObject = function (additionalProps) {
-      return oldFabricObject.call(this, ["name"].concat(additionalProps!));
-    };
-  }, []);
+  const oldFabricObject = fabric.FabricObject.prototype.toObject;
+  fabric.FabricObject.prototype.toObject = function (additionalProps) {
+    return oldFabricObject.call(this, ["name"].concat(additionalProps!));
+  };
 
-  const addBackgroundTwibbon = useCallback(
-    (twibbonUrl: string, isBlur = false) => {
-      fabric.FabricImage.fromURL(
-        twibbonUrl,
-        { crossOrigin: "anonymous" },
-        {
-          hasControls: false,
-          hasBorders: false,
-          objectCaching: false,
-          selectable: false,
-          evented: false,
-          lockMovementX: false,
-          lockMovementY: false,
-        }
-      ).then((twibbonImage) => {
-        if (!fabricCanvas) return;
+  const addBackgroundTwibbon = (twibbonUrl: string, isBlur = false) => {
+    const prevId = "twibbon_background";
 
-        twibbonImage.scaleToHeight(fabricCanvas.getHeight() ?? 0);
-        twibbonImage.scaleToWidth(fabricCanvas.getWidth() ?? 0);
-        (twibbonImage as any).name = "twibbon_background";
-
-        if (isBlur) {
-          twibbonImage.filters = twibbonImage.filters.concat([
-            new fabric.filters.Blur({ blur: 0.5 }),
-          ]);
-          twibbonImage.applyFilters();
-        }
-
-        twibbonImage.setControlsVisibility({
-          tr: false,
-          tl: false,
-          br: false,
-          bl: false,
-          mtr: false,
-          mr: false,
-          mt: false,
-          mb: false,
-          ml: false,
-          deleteControl: false,
-        });
-
-        fabricCanvas.insertAt(0, twibbonImage);
-        setFrameUrl(twibbonUrl);
-      });
-    },
-    [fabricCanvas]
-  );
-
-  const removeFabricObject = useCallback(
-    (objectName: string) => {
-      if (!fabricCanvas) return;
-
-      const objects: fabric.FabricObject[] = fabricCanvas.getObjects();
-      for (const obj of objects) {
-        if ((obj as any).name === objectName) {
-          fabricCanvas.remove(obj);
-        }
+    fabric.FabricImage.fromURL(
+      twibbonUrl,
+      {
+        crossOrigin: "anonymous",
+      },
+      {
+        hasControls: false,
+        hasBorders: false,
+        objectCaching: false,
+        selectable: false,
+        evented: false,
+        lockMovementX: false,
+        lockMovementY: false,
       }
-    },
-    [fabricCanvas]
-  );
+    ).then((twibbonImage) => {
+      twibbonImage.scaleToHeight(fabricCanvas?.getHeight() ?? 0);
+      twibbonImage.scaleToWidth(fabricCanvas?.getWidth() ?? 0);
 
-  const addFrameTwibbon = useCallback(
-    (frameUrl: string) => {
-      fabric.FabricImage.fromURL(
-        frameUrl,
-        { crossOrigin: "anonymous" },
-        {
-          hasControls: true,
-          hasBorders: false,
-          centeredRotation: true,
-          centeredScaling: true,
-          objectCaching: false,
-          originX: "center",
-          originY: "center",
-          absolutePositioned: true,
-        }
-      ).then((frameImage) => {
-        if (!fabricCanvas) return;
+      (twibbonImage as any).name = prevId;
+      setFrameUrl(twibbonUrl);
 
-        frameImage.scaleToHeight(fabricCanvas.getHeight() ?? 0);
-        frameImage.scaleToWidth(fabricCanvas.getWidth() ?? 0);
-        (frameImage as any).name = "twibbon_frame";
-
-        frameImage.filters = frameImage.filters.concat([
-          new fabric.filters.Brightness(),
-          new fabric.filters.Contrast(),
+      twibbonImage.centeredScaling = true;
+      twibbonImage.centeredRotation = true;
+      twibbonImage.setControlsVisibility({
+        tr: !1,
+        tl: !1,
+        br: !1,
+        bl: !1,
+        mtr: !1,
+        mr: !1,
+        mt: !1,
+        mb: !1,
+        ml: !1,
+        deleteControl: !1,
+      });
+      if (isBlur) {
+        twibbonImage.filters = twibbonImage.filters.concat([
+          new fabric.filters.Blur({
+            blur: 0.5,
+          }),
         ]);
 
-        frameImage.applyFilters();
+        twibbonImage.applyFilters();
+      }
 
-        removeFabricObject("twibbon_frame");
-        fabricCanvas.centerObject(frameImage);
-        fabricCanvas.insertAt(1, frameImage);
-        setLastTwb(frameUrl);
+      fabricCanvas?.insertAt(0, twibbonImage);
+    });
+  };
+
+  const removeFabricObject = (objectName: string): void => {
+    for (const obj of fabricCanvas?.getObjects() ?? []) {
+      if ((obj as any).name === objectName) {
+        console.log(objectName, "removed");
+        fabricCanvas?.remove(obj);
+      }
+    }
+  };
+
+  const addFrameTwibbon = (frameUrl: string) => {
+    fabric.FabricImage.fromURL(
+      frameUrl,
+      {
+        crossOrigin: "anonymous",
+      },
+      {
+        hasControls: true,
+        hasBorders: false,
+        centeredRotation: true,
+        centeredScaling: true,
+        objectCaching: false,
+        originX: "center",
+        originY: "center",
+        absolutePositioned: true,
+      }
+    ).then((frameImage) => {
+      const prevId = "twibbon_frame";
+
+      frameImage.scaleToHeight(fabricCanvas?.getHeight() ?? 0);
+      frameImage.scaleToWidth(fabricCanvas?.getWidth() ?? 0);
+
+      (frameImage as any).name = prevId;
+      setLastTwb(frameUrl);
+
+      frameImage.centeredRotation = true;
+      frameImage.centeredScaling = true;
+      frameImage.setControlsVisibility({
+        tr: !1,
+        tl: !1,
+        br: !1,
+        bl: !1,
+        mtr: !1,
+        mr: !1,
+        mt: !1,
+        mb: !1,
+        ml: !1,
+        deleteControl: !1,
       });
-    },
-    [fabricCanvas, removeFabricObject]
-  );
 
-  const setupFabric = useCallback((): fabric.Canvas => {
-    const fbCanvas = new fabric.Canvas(canvasRef.current!, {
+      frameImage.filters = frameImage.filters.concat([
+        new fabric.filters.Brightness(),
+        new fabric.filters.Contrast(),
+      ]);
+
+      frameImage.applyFilters();
+
+      removeFabricObject(prevId);
+      fabricCanvas?.centerObject(frameImage);
+      fabricCanvas?.insertAt(1, frameImage);
+    });
+  };
+
+  const setupFabric = (): fabric.Canvas => {
+    const fabricCanvas = new fabric.Canvas(canvasRef.current!, {
       enablePointerEvents: true,
       allowTouchScrolling: true,
       backgroundColor: "#EEEEF3",
@@ -157,65 +172,83 @@ export const useTwibbonCanvas = (): UseTwibbonHookRes => {
       hoverCursor: "pointer",
     });
 
-    const dimensions = isMd
-      ? { width: 500, height: 500 }
-      : { width: 300, height: 300 };
-    fbCanvas.setDimensions(dimensions);
+    if (isMd) {
+      fabricCanvas.setDimensions({
+        width: 500,
+        height: 500,
+      });
+    } else {
+      fabricCanvas.setDimensions({
+        width: 300,
+        height: 300,
+      });
+    }
 
-    return fbCanvas;
-  }, [isMd]);
+    return fabricCanvas;
+  };
 
   useEffect(() => {
-    const fbCanvas = setupFabric();
-    setFabricCanvas(fbCanvas);
+    const fabricCanvas = setupFabric();
+    setFabricCanvas((prev) => fabricCanvas);
 
     if (frameUrl) {
       addBackgroundTwibbon(frameUrl);
     }
 
+    console.log("Fabric Canvas 01");
+
     return () => {
-      fbCanvas.dispose();
+      fabricCanvas.dispose();
     };
-  }, [setupFabric, frameUrl, addBackgroundTwibbon]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
-    if (!fabricCanvas) return;
+    fabricCanvas?.clear();
 
-    fabricCanvas.clear();
+    if (isMd) {
+      setRecommendedSize({
+        height: 500,
+        width: 500,
+      });
 
-    const dimensions = isMd
-      ? { width: 500, height: 500 }
-      : { width: 300, height: 300 };
-    fabricCanvas.setDimensions(dimensions);
-    setRecommendedSize(dimensions);
+      fabricCanvas?.setDimensions({
+        width: 500,
+        height: 500,
+      });
+    } else {
+      setRecommendedSize({
+        height: 300,
+        width: 300,
+      });
+
+      fabricCanvas?.setDimensions({
+        width: 300,
+        height: 300,
+      });
+    }
 
     if (frameUrl) {
       addBackgroundTwibbon(frameUrl);
+
       if (lastTwb) {
         addFrameTwibbon(lastTwb);
       }
     }
-  }, [
-    isMd,
-    fabricCanvas,
-    frameUrl,
-    lastTwb,
-    addBackgroundTwibbon,
-    addFrameTwibbon,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMd]);
 
   useEffect(() => {
-    if (!fabricCanvas) return;
-
-    const objects = fabricCanvas.getObjects();
-    for (const obj of objects) {
+    for (const obj of fabricCanvas?.getObjects() ?? []) {
       if ((obj as any).name === "twibbon_frame") {
         obj.scale(Math.max(0.0025, scaled));
         obj.setCoords();
-        fabricCanvas.renderAll();
+
+        fabricCanvas?.renderAll();
       }
     }
-  }, [scaled, fabricCanvas]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scaled]);
 
   return {
     canvasRef,

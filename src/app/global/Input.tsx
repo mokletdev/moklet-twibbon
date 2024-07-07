@@ -12,6 +12,7 @@ interface InputProps {
   required?: boolean;
   name?: string;
   value?: string;
+  defaultValue?: string;
   handleChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: KeyboardEventHandler<HTMLInputElement>;
   disabled?: boolean;
@@ -52,6 +53,7 @@ export function TextField({
   type = "text",
   handleChange,
   value,
+  defaultValue,
   onKeyDown,
   disabled,
 }: Readonly<TextFieldProps>) {
@@ -62,7 +64,9 @@ export function TextField({
         <label
           htmlFor={name}
           className={cn(
-            `first-letter:capitalize ${required ? "after:text-red-500 after:content-['*']" : ""}`,
+            `first-letter:capitalize ${
+              required ? "after:text-red-500 after:content-['*']" : ""
+            }`
           )}
         >
           {label}
@@ -81,7 +85,8 @@ export function TextField({
         <input
           type={showPassword ? "text" : type}
           name={name}
-          defaultValue={value}
+          defaultValue={defaultValue}
+          value={value}
           placeholder={placeholder}
           onChange={handleChange}
           id={name}
@@ -110,7 +115,9 @@ export function TextArea({
         <label
           htmlFor={name}
           className={cn(
-            `first-letter:capitalize ${required ? "after:text-red-500 after:content-['*']" : ""}`,
+            `first-letter:capitalize ${
+              required ? "after:text-red-500 after:content-['*']" : ""
+            }`
           )}
         >
           {label}
@@ -145,7 +152,9 @@ export function SelectField({
         <label
           htmlFor={name}
           className={cn(
-            `first-letter:capitalize ${required ? "after:text-red-500 after:content-['*']" : ""}`,
+            `first-letter:capitalize ${
+              required ? "after:text-red-500 after:content-['*']" : ""
+            }`
           )}
         >
           {label}
@@ -189,7 +198,9 @@ export function RadioField({
         <label
           htmlFor={name}
           className={cn(
-            `first-letter:capitalize ${required ? "after:text-red-500 after:content-['*']" : ""}`,
+            `first-letter:capitalize ${
+              required ? "after:text-red-500 after:content-['*']" : ""
+            }`
           )}
         >
           {label}
@@ -232,7 +243,9 @@ export function CheckboxField({
         <label
           htmlFor={label}
           className={cn(
-            `first-letter:capitalize ${required ? "after:text-red-500 after:content-['*']" : ""}`,
+            `first-letter:capitalize ${
+              required ? "after:text-red-500 after:content-['*']" : ""
+            }`
           )}
         >
           {label}
