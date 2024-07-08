@@ -32,7 +32,7 @@ export default function Form({ searchParams }: Readonly<Props>) {
   const canvasHook = useTwibbonCanvas();
 
   const [fileName, setFileName] = useState<string>();
-  const [scale, setScale] = useState<number>(0.5);
+  const [scale, setScale] = useState<number>(1);
 
   useEffect(() => {
     const clipboard = new ClipboardJS("#copy-btn");
@@ -55,6 +55,7 @@ export default function Form({ searchParams }: Readonly<Props>) {
   useEffect(() => {
     if (searchParams?.slug) {
       window.history.pushState({}, "", `/${searchParams?.slug}`);
+      localStorage.setItem(searchParams.slug, JSON.stringify(searchParams));
     }
 
     canvasHook.addBackground(frameUrl!);
@@ -98,8 +99,8 @@ export default function Form({ searchParams }: Readonly<Props>) {
             <input
               id="zoom"
               type="range"
-              min="0.01"
-              max="5"
+              min="0.2"
+              max="3"
               step="0.01"
               value={scale}
               onChange={(e) => {

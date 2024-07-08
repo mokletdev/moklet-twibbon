@@ -226,7 +226,11 @@ export const useTwibbonCanvas = (): UseTwibbonHookRes => {
   useEffect(() => {
     for (const obj of fabricCanvas?.getObjects() ?? []) {
       if ((obj as any).name === "twibbon_frame") {
-        obj.scale(Math.max(0.0025, scaled));
+        const canvasHeight = fabricCanvas?.getHeight() ?? 0;
+        const canvasWidth = fabricCanvas?.getWidth() ?? 0;
+
+        obj.scaleToHeight(canvasHeight * scaled);
+        obj.scaleToWidth(canvasWidth * scaled);
         obj.setCoords();
 
         fabricCanvas?.renderAll();
