@@ -2,7 +2,8 @@
 import { Button } from "@/app/_components/global/button";
 import { useTwibbonCanvas } from "@/hooks/useTwibbonCanvas";
 import cn from "@/lib/clsx";
-import { useEffect, useState } from "react";
+import ClipboardJS from "clipboard";
+import { useEffect, useRef, useState } from "react";
 import { FaFileImage } from "react-icons/fa";
 import { FaCopy, FaDownload } from "react-icons/fa6";
 import { toast } from "sonner";
@@ -32,6 +33,24 @@ export default function Form({ searchParams }: Readonly<Props>) {
 
   const [fileName, setFileName] = useState<string>();
   const [scale, setScale] = useState<number>(0.5);
+
+  useEffect(() => {
+    const clipboard = new ClipboardJS("#copy-btn");
+
+    clipboard.on("success", (e) => {
+      toast.success("Copied caption successfully!");
+      e.clearSelection();
+    });
+
+    clipboard.on("error", (e) => {
+      console.log(e);
+      toast.error("Failed to copy caption!");
+    });
+
+    return () => {
+      clipboard.destroy();
+    };
+  }, []);
 
   useEffect(() => {
     if (searchParams?.slug) {
@@ -138,27 +157,17 @@ export default function Form({ searchParams }: Readonly<Props>) {
           <FaDownload /> Download
         </Button>
         {searchParams?.caption && (
-          <Button
-            onClick={() => {
-              const toastId = toast.loading("Copying caption...");
-              navigator.clipboard
-                .writeText(searchParams.caption as string)
-                .then(() => {
-                  toast.success("Caption copied successfully!", {
-                    id: toastId,
-                  });
-                })
-                .catch(() => {
-                  toast.error("Failed to copy caption to clipboard", {
-                    id: toastId,
-                  });
-                });
-            }}
-            variant={"quartiary"}
-            className="flex items-center gap-2"
-          >
-            <FaCopy /> Caption
-          </Button>
+          <>
+            <Button
+              id="copy-btn"
+              variant={"quartiary"}
+              className="flex items-center gap-2"
+              data-clipboard-text="hello there"
+              data-clipboard-action="copy"
+            >
+              <FaCopy /> Caption
+            </Button>
+          </>
         )}
       </div>
     </div>

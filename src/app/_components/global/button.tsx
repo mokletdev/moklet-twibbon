@@ -1,7 +1,7 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import Link, { LinkProps as NextLinkProps } from "next/link";
 import {
-  ComponentPropsWithoutRef,
+  ComponentProps,
   HTMLAttributeAnchorTarget,
   MouseEventHandler,
   ReactNode,
@@ -38,7 +38,7 @@ interface LinkButtonProps
 }
 
 interface ButtonProps
-  extends ComponentPropsWithoutRef<"button">,
+  extends ComponentProps<"button">,
     VariantProps<typeof buttonVariants> {
   children?: ReactNode;
   type?: "button" | "reset" | "submit";
@@ -74,6 +74,7 @@ export function Button({
   isDisabled,
   className,
   variant,
+  ...props
 }: Readonly<ButtonProps>) {
   return (
     <button
@@ -81,6 +82,7 @@ export function Button({
       onClick={onClick}
       disabled={isDisabled}
       className={cn(buttonVariants({ variant }), className)}
+      {...props}
     >
       {children}
     </button>
