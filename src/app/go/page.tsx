@@ -1,7 +1,7 @@
-import { Metadata } from "next";
-import { H2 } from "../global/Text";
-import Form from "./_components/Form";
 import { isValidImageUrl } from "@/utils/validator";
+import { Metadata } from "next";
+import { H2 } from "../_components/global/text";
+import Form from "./_components/form";
 
 interface MetadataProps {
   searchParams: { [key: string]: string | string[] | undefined };
@@ -13,7 +13,7 @@ export async function generateMetadata({
   const title = searchParams.title?.toString();
 
   return {
-    title: title ?? "Moklet Twibbon",
+    title: title ?? "Custom Twibbon",
   };
 }
 

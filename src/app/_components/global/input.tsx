@@ -41,7 +41,7 @@ interface SelectFieldProps {
 }
 
 interface TextFieldProps extends InputProps {
-  type: "email" | "text" | "password" | "number" | string;
+  type: "email" | "text" | "password" | "number" | "url";
 }
 
 export function TextField({

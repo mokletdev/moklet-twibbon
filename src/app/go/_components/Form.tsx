@@ -1,11 +1,12 @@
 "use client";
+import { Button } from "@/app/_components/global/button";
 import { useTwibbonCanvas } from "@/hooks/useTwibbonCanvas";
-import { useEffect, useState } from "react";
-import Canvas from "./Canvas";
-import { Button } from "@/app/global/Button";
 import cn from "@/lib/clsx";
-import { TextField } from "@/app/global/Input";
+import { useEffect, useState } from "react";
 import { FaFileImage } from "react-icons/fa";
+import { FaCopy, FaDownload } from "react-icons/fa6";
+import { toast } from "sonner";
+import Canvas from "./canvas";
 
 interface Props {
   searchParams: {
@@ -30,7 +31,7 @@ export default function Form({ searchParams }: Readonly<Props>) {
   const canvasHook = useTwibbonCanvas();
 
   const [fileName, setFileName] = useState<string>();
-  const [scale, setScale] = useState<number>(0.1);
+  const [scale, setScale] = useState<number>(0.5);
 
   useEffect(() => {
     if (searchParams?.slug) {
@@ -43,6 +44,7 @@ export default function Form({ searchParams }: Readonly<Props>) {
 
   useEffect(() => {
     canvasHook.setScaled(scale);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scale]);
 
   return (
@@ -64,34 +66,42 @@ export default function Form({ searchParams }: Readonly<Props>) {
             htmlFor="zoom"
             className="text-lg font-semibold text-slate-600"
           >
-            Zoom
+            Zoom {(Math.round((scale + Number.EPSILON) * 100) / 100).toString()}
+            x
           </label>
-          <input
-            id="zoom"
-            type="range"
-            min="0.01"
-            max="5"
-            step="0.01"
-            value={scale}
-            onChange={(e) => {
-              setScale(parseFloat(e.currentTarget.value));
-            }}
-            className="w-full bg-red-500"
-          />
-          <TextField
-            type="number"
-            handleChange={(e) => {
-              setScale(parseFloat(e.currentTarget.value) / 100);
-            }}
-            value={parseInt((scale * 100).toString()).toString()}
-            className="w-[15%]"
-          />
+          <div className="flex items-center gap-3">
+            <Button
+              variant={"primary"}
+              onClick={() => setScale((prev) => prev - 0.01)}
+            >
+              -
+            </Button>
+            <input
+              id="zoom"
+              type="range"
+              min="0.01"
+              max="5"
+              step="0.01"
+              value={scale}
+              onChange={(e) => {
+                setScale(parseFloat(e.currentTarget.value));
+              }}
+              className="w-full bg-red-500"
+            />
+            <Button
+              variant={"primary"}
+              onClick={() => setScale((prev) => prev + 0.01)}
+            >
+              +
+            </Button>
+          </div>
         </div>
       </div>
       <div className="flex flex-row items-center mx-auto">
         <input
           type="file"
           id="foto"
+          accept="image/png, image/jpeg, image/jpg"
           onChange={async (ev) => {
             setFileName(ev.currentTarget.files?.[0]?.name);
 
@@ -123,19 +133,31 @@ export default function Form({ searchParams }: Readonly<Props>) {
             }
           }}
           variant={"primary"}
+          className="flex items-center gap-2"
         >
-          Download
+          <FaDownload /> Download
         </Button>
         {searchParams?.caption && (
           <Button
             onClick={() => {
-              navigator.clipboard.writeText(searchParams.caption as string);
-              alert("Caption sukses disalin!");
+              const toastId = toast.loading("Copying caption...");
+              navigator.clipboard
+                .writeText(searchParams.caption as string)
+                .then(() => {
+                  toast.success("Caption copied successfully!", {
+                    id: toastId,
+                  });
+                })
+                .catch(() => {
+                  toast.error("Failed to copy caption to clipboard", {
+                    id: toastId,
+                  });
+                });
             }}
-            variant={"primary"}
-            className="bg-gray-600 hover:bg-gray-400"
+            variant={"quartiary"}
+            className="flex items-center gap-2"
           >
-            Copy Caption
+            <FaCopy /> Caption
           </Button>
         )}
       </div>

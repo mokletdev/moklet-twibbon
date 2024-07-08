@@ -1,6 +1,6 @@
-import { Button } from "./global/Button";
-import { TextField } from "./global/Input";
-import { H1, P } from "./global/Text";
+import { Button } from "./_components/global/button";
+import { TextField } from "./_components/global/input";
+import { H1, P } from "./_components/global/text";
 
 export default function Home() {
   return (
