@@ -1,11 +1,19 @@
 import { Button } from "./_components/global/button";
+import Image from "./_components/global/image";
 import { TextField } from "./_components/global/input";
-import { H1, P } from "./_components/global/text";
+import { P } from "./_components/global/text";
 
 export default function Home() {
   return (
     <div className="text-center w-screen h-screen flex items-center justify-center flex-col gap-4 p-6">
-      <H1>Moklet Twibbon</H1>
+      <div className="flex flex-col items-center gap-4">
+        <Image
+          src={"/horizontal.svg"}
+          alt="Logo Moklet.org"
+          width={190}
+          height={46}
+        />
+      </div>
       <P>
         Have you ever tired of your twibbon having a watermark on it? We, Moklet
         Developers, a patriotic Mokleters, provides you with a custom solution.
