@@ -163,7 +163,7 @@ export default function Form({ searchParams }: Readonly<Props>) {
               id="copy-btn"
               variant={"quartiary"}
               className="flex items-center gap-2"
-              data-clipboard-text="hello there"
+              data-clipboard-text={searchParams.caption}
               data-clipboard-action="copy"
             >
               <FaCopy /> Caption
