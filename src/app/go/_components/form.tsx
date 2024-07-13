@@ -106,7 +106,7 @@ export default function Form({ searchParams }: Readonly<Props>) {
               onChange={(e) => {
                 setScale(parseFloat(e.currentTarget.value));
               }}
-              className="w-full bg-red-500"
+              className="bg-red-500 !w-[10rem] md:!w-[15rem]"
             />
             <Button
               variant={"primary"}
