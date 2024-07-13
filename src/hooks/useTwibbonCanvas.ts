@@ -247,11 +247,11 @@ export const useTwibbonCanvas = (): UseTwibbonHookRes => {
     recommendedSize,
     toDataUrl() {
       return fabricCanvas?.toDataURL({
-        quality: 1,
+        quality: 2,
         format: "jpeg",
         top: 0,
         left: 0,
-        multiplier: 2,
+        multiplier: 4,
         height: recommendedSize.height,
         width: recommendedSize.width,
       });
