@@ -145,10 +145,10 @@ export const useTwibbonCanvas = (): UseTwibbonHookRes => {
       setLastTwb(frameUrl);
 
       frameImage.setControlsVisibility({
-        tr: false,
-        tl: false,
-        br: false,
-        bl: false,
+        tr: true,
+        tl: true,
+        br: true,
+        bl: true,
         mtr: false,
         mr: false,
         mt: false,
