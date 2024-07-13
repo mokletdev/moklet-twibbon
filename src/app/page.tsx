@@ -1,30 +1,30 @@
 import { Button } from "./_components/global/button";
-import Image from "./_components/global/image";
 import { TextField } from "./_components/global/input";
-import { P } from "./_components/global/text";
+import { H1, P } from "./_components/global/text";
 
 export default function Home() {
   return (
-    <div className="text-center w-screen h-screen flex items-center justify-center flex-col gap-4 p-6">
-      <div className="flex flex-col items-center gap-4">
-        <Image
-          src={"/horizontal.svg"}
-          alt="Logo Moklet.org"
-          width={190}
-          height={46}
-        />
+    <div className="w-screen h-screen flex items-center justify-center flex-col gap-12 p-6">
+      <div className="w-1/2">
+        <H1 className="mb-[18px]">
+          <span className="text-primary-500">Moklet Twibbon,</span> Solusi
+          Membuat Campaign Gratis tanpa Watermark
+        </H1>
+        <P>
+          Pernahkah Anda merasa bosan dengan twibbon Anda yang memiliki
+          watermark? Kami,{" "}
+          <span className="text-primary-500">Moklet Developers</span>, Mokleters
+          yang patriotik, menyediakan solusi khusus untuk Anda.
+        </P>
       </div>
-      <P>
-        Have you ever tired of your twibbon having a watermark on it? We, Moklet
-        Developers, a patriotic Mokleters, provides you with a custom solution.
-      </P>
-      <form
-        action="/go"
-        method="get"
-        className="px-6 py-4 min-w-[200px] md:min-w-[344px] max-w-xl rounded-md bg-white flex flex-col space-y-6"
-      >
-        <TextField type="url" name="frameUrl" required label="Frame URL" />
-        <Button variant={"primary"}>Go</Button>
+      <form action="/go" method="get" className="flex items-center gap-2 w-1/2">
+        <TextField
+          type="url"
+          name="frameUrl"
+          required
+          placeholder="Frame URL"
+        />
+        <Button variant={"primary"}>Buat twibbon!</Button>
       </form>
     </div>
   );
