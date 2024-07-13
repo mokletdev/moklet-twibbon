@@ -15,13 +15,13 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          "bg-primary-400 px-6 py-3 hover:bg-primary-200 text-base text-white disabled:text-neutral-500 disabled:bg-neutral-300",
+          "bg-primary-400 px-4 py-2 md:px-6 md:py-3 hover:bg-primary-200 text-base text-white disabled:text-neutral-500 disabled:bg-neutral-300",
         secondary:
-          "border-primary-400 px-6 py-3 hover:bg-primary-50 text-base text-primary-400 disabled:bg-neutral-300 text-primary-400 disabled:text-neutral-500",
+          "border-primary-400 px-4 py-2 md:px-6 md:py-3 hover:bg-primary-50 text-base text-primary-400 disabled:bg-neutral-300 text-primary-400 disabled:text-neutral-500",
         tertiary:
           "text-base text-black hover:text-primary-400 text-black disabled:text-neutral-500",
         quartiary:
-          "text-base px-6 py-3 text-primary-400 bg-white hover:bg-primary-50 disabled:bg-neutral-400 disabled:text-white",
+          "text-base px-4 py-2 md:px-6 md:py-3 text-primary-400 bg-white hover:bg-primary-50 disabled:bg-neutral-400 disabled:text-white",
       },
     },
   }

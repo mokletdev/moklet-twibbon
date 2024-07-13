@@ -145,10 +145,10 @@ export const useTwibbonCanvas = (): UseTwibbonHookRes => {
       setLastTwb(frameUrl);
 
       frameImage.setControlsVisibility({
-        tr: false,
-        tl: false,
-        br: false,
-        bl: false,
+        tr: true,
+        tl: true,
+        br: true,
+        bl: true,
         mtr: false,
         mr: false,
         mt: false,
@@ -175,7 +175,7 @@ export const useTwibbonCanvas = (): UseTwibbonHookRes => {
 
   const setupFabric = (): fabric.Canvas => {
     const fabricCanvas = new fabric.Canvas(canvasRef.current!, {
-      enablePointerEvents: true,
+      enablePointerEvents: false,
       allowTouchScrolling: true,
       backgroundColor: "#EEEEF3",
       selection: false,
@@ -247,11 +247,11 @@ export const useTwibbonCanvas = (): UseTwibbonHookRes => {
     recommendedSize,
     toDataUrl() {
       return fabricCanvas?.toDataURL({
-        quality: 1,
+        quality: 2,
         format: "jpeg",
         top: 0,
         left: 0,
-        multiplier: 2,
+        multiplier: 4,
         height: recommendedSize.height,
         width: recommendedSize.width,
       });
