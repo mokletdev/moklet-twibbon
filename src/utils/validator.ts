@@ -1,7 +1,7 @@
 export const isValidImageUrl = (url: string): boolean => {
-  const imageExtensions = /\.(jpeg|jpg|gif|png|svg|webp|bmp|tiff|ico)$/i;
+  const imageExtensions = /\.(jpeg|jpg|gif|png|svg|webp|bmp|tiff|ico|blob)$/i;
   const urlPattern = new RegExp(
-    "^(https?:\\/\\/)?" + // validate protocol
+    "^(http?:\\/\\/)?" + // validate protocol
       "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // validate domain name
       "((\\d{1,3}\\.){3}\\d{1,3}))" + // validate OR ip (v4) address
       "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // validate port and path
