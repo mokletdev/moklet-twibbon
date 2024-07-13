@@ -38,13 +38,13 @@ export default function Form({ searchParams }: Readonly<Props>) {
     const clipboard = new ClipboardJS("#copy-btn");
 
     clipboard.on("success", (e) => {
-      toast.success("Copied caption successfully!");
+      toast.success("Sukses copy caption!");
       e.clearSelection();
     });
 
     clipboard.on("error", (e) => {
       console.log(e);
-      toast.error("Failed to copy caption!");
+      toast.error("Gagal copy caption!");
     });
 
     return () => {

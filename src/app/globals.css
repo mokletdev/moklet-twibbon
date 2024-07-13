@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  @apply bg-[#fbf0f0];
+  @apply bg-neutral-100;
 }
 
 /********** Range Input Styles **********/
