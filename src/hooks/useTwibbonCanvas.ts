@@ -175,7 +175,7 @@ export const useTwibbonCanvas = (): UseTwibbonHookRes => {
 
   const setupFabric = (): fabric.Canvas => {
     const fabricCanvas = new fabric.Canvas(canvasRef.current!, {
-      enablePointerEvents: true,
+      enablePointerEvents: false,
       allowTouchScrolling: true,
       backgroundColor: "#EEEEF3",
       selection: false,
