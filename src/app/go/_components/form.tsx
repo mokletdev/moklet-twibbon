@@ -3,7 +3,7 @@ import { Button } from "@/app/_components/global/button";
 import { useTwibbonCanvas } from "@/hooks/useTwibbonCanvas";
 import cn from "@/lib/clsx";
 import ClipboardJS from "clipboard";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaFileImage } from "react-icons/fa";
 import { FaCopy, FaDownload } from "react-icons/fa6";
 import { toast } from "sonner";

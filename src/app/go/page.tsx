@@ -1,15 +1,12 @@
-import { isValidImageUrl } from "@/utils/validator";
 import { Metadata } from "next";
 import { H2 } from "../_components/global/text";
-import Form from "./_components/form";
+import RenderForm, { Props } from "./_components/render-form";
 
 interface MetadataProps {
   searchParams: { [key: string]: string | string[] | undefined };
 }
 
-export async function generateMetadata({
-  searchParams,
-}: MetadataProps): Promise<Metadata> {
+export function generateMetadata({ searchParams }: MetadataProps): Metadata {
   const title = searchParams.title?.toString();
 
   return {
@@ -17,24 +14,11 @@ export async function generateMetadata({
   };
 }
 
-interface Props {
-  searchParams: {
-    title?: string;
-    frameUrl?: string;
-    caption?: string;
-    slug?: string;
-  };
-}
-
 export default function GoPage({ searchParams }: Readonly<Props>) {
   return (
     <section className="py-6 flex justify-center items-center flex-col space-y-4 md:space-y-6">
       <H2>{searchParams?.title ?? "Twibbon"}</H2>
-      {searchParams?.frameUrl && isValidImageUrl(searchParams.frameUrl) ? (
-        <Form searchParams={searchParams} />
-      ) : (
-        <H2>A valid frame URL is required!</H2>
-      )}
+      <RenderForm searchParams={searchParams} />
     </section>
   );
 }
