@@ -1,8 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import { useRouter } from "next/navigation";
-import { notFound } from "next/navigation";
+import { useRouter, notFound, useParams } from "next/navigation";
 import { H1 } from "../_components/global/text";
 
 export default function SlugPage() {

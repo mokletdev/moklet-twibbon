@@ -1,18 +1,56 @@
-import { forwardRef } from "react";
+"use client";
 
-export type TwibbonCanvasProps = {
-  canvasid: string;
+import { forwardRef, CSSProperties, useEffect, useState } from "react";
+import cn from "@/lib/clsx";
+
+interface CanvasProps {
   width: number;
   height: number;
-  hidden?: boolean;
-};
+  canvasid: string;
+  className?: string;
+  style?: CSSProperties;
+}
 
-const TwibbonCanvas = forwardRef<HTMLCanvasElement, TwibbonCanvasProps>(
-  (props, ref) => {
-    return <canvas id={props.canvasid} {...props} ref={ref} />;
-  }
+const Canvas = forwardRef<HTMLCanvasElement, CanvasProps>(
+  ({ width, height, canvasid, className, style }, ref) => {
+    const [isVisible, setIsVisible] = useState(false);
+
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setIsVisible(true);
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }, []);
+
+    return (
+      <div
+        className={cn(
+          "relative canvas-container transition-all duration-500",
+          isVisible ? "opacity-100" : "opacity-0",
+          className,
+        )}
+        style={{
+          width: `${width}px`,
+          height: `${height}px`,
+          ...style,
+        }}
+      >
+        <canvas
+          id={canvasid}
+          width={width}
+          height={height}
+          ref={ref}
+          className={cn(
+            "rounded-lg transition-all duration-500",
+            isVisible ? "scale-100" : "scale-95",
+          )}
+        ></canvas>
+      </div>
+    );
+  },
 );
 
-TwibbonCanvas.displayName = "TwibbonCanvas";
+Canvas.displayName = "Canvas";
 
-export default TwibbonCanvas;
+export default Canvas;
