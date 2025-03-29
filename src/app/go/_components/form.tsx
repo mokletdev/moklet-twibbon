@@ -319,7 +319,10 @@ export default function Form({ searchParams }: Readonly<Props>) {
         />
 
         {!fileName && (
-          <div className="absolute inset-0 flex items-center justify-center bg-gray-50 bg-opacity-60 transition-opacity group-hover:bg-opacity-90 pointer-events-none">
+          <div
+            onClick={handleUploadClick}
+            className="absolute inset-0 flex items-center justify-center bg-gray-50 bg-opacity-60 transition-opacity group-hover:bg-opacity-90 pointer-events-none cursor-pointer"
+          >
             <div className="text-center p-6 rounded-xl transition-all duration-300 transform group-hover:scale-105">
               <div className="mb-3 bg-primary-100 text-primary-500 rounded-full p-3 inline-block">
                 <FaFileImage size={24} />
