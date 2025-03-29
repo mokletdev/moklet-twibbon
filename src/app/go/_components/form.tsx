@@ -79,7 +79,7 @@ export default function Form({ searchParams }: Readonly<Props>) {
         <div
           className={cn(
             "w-full flex flex-col items-center gap-4 mt-10 justify-center",
-            !fileName ? "hidden" : null
+            !fileName ? "hidden" : null,
           )}
         >
           <label
@@ -127,7 +127,7 @@ export default function Form({ searchParams }: Readonly<Props>) {
 
             if (ev.currentTarget.files?.length) {
               canvasHook.addFrame(
-                URL.createObjectURL(ev.currentTarget.files[0])
+                URL.createObjectURL(ev.currentTarget.files[0]),
               );
             }
           }}
@@ -148,7 +148,7 @@ export default function Form({ searchParams }: Readonly<Props>) {
             if (data) {
               downloadURI(
                 data,
-                `Twibbon ${searchParams?.title ?? "Moklet"}.jpg`
+                `Twibbon ${searchParams?.title ?? "Moklet"}.jpg`,
               );
             }
           }}
@@ -158,17 +158,15 @@ export default function Form({ searchParams }: Readonly<Props>) {
           <FaDownload /> Download
         </Button>
         {searchParams?.caption && (
-          <>
-            <Button
-              id="copy-btn"
-              variant={"quartiary"}
-              className="flex items-center gap-2"
-              data-clipboard-text={searchParams.caption}
-              data-clipboard-action="copy"
-            >
-              <FaCopy /> Caption
-            </Button>
-          </>
+          <Button
+            id="copy-btn"
+            variant={"quartiary"}
+            className="flex items-center gap-2"
+            data-clipboard-text={searchParams.caption}
+            data-clipboard-action="copy"
+          >
+            <FaCopy /> Caption
+          </Button>
         )}
       </div>
     </div>
