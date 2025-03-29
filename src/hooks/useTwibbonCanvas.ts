@@ -23,6 +23,13 @@ export type UseTwibbonHookRes = {
   toDataUrl: () => string | undefined;
   setScaled: Dispatch<SetStateAction<number>>;
   scaled: number;
+  applyImageFilters: (brightness: number, contrast: number) => void;
+  resetCanvas: () => void;
+  getCurrentImageState: () => {
+    scale: number;
+    brightness: number;
+    contrast: number;
+  } | null;
 };
 
 export const useTwibbonCanvas = (): UseTwibbonHookRes => {
@@ -32,6 +39,8 @@ export const useTwibbonCanvas = (): UseTwibbonHookRes => {
   const [scaled, setScaled] = useState<number>(0.5);
   const frameAspectRatioRef = useRef<number>(1);
   const dimensionsUpdatedRef = useRef<boolean>(false);
+  const [currentBrightness, setCurrentBrightness] = useState<number>(0);
+  const [currentContrast, setCurrentContrast] = useState<number>(0);
 
   const [recommendedSize, setRecommendedSize] = useState<{
     height: number;
@@ -93,6 +102,52 @@ export const useTwibbonCanvas = (): UseTwibbonHookRes => {
     },
     [fabricCanvas],
   );
+
+  const resetCanvas = useCallback(() => {
+    if (fabricCanvas) {
+      fabricCanvas.clear();
+      dimensionsUpdatedRef.current = false;
+      setCurrentBrightness(0);
+      setCurrentContrast(0);
+
+      if (frameUrl) {
+        addBackgroundTwibbon(frameUrl);
+      }
+    }
+  }, [fabricCanvas, frameUrl]);
+
+  const applyImageFilters = useCallback(
+    (brightness: number, contrast: number) => {
+      if (!fabricCanvas) return;
+
+      setCurrentBrightness(brightness);
+      setCurrentContrast(contrast);
+
+      const objects = fabricCanvas.getObjects();
+      for (const obj of objects) {
+        if ((obj as any).name === "twibbon_frame") {
+          const imgObj = obj as fabric.Image;
+          imgObj.filters = [
+            new fabric.filters.Brightness({ brightness }),
+            new fabric.filters.Contrast({ contrast }),
+          ];
+          imgObj.applyFilters();
+          fabricCanvas.renderAll();
+        }
+      }
+    },
+    [fabricCanvas],
+  );
+
+  const getCurrentImageState = useCallback(() => {
+    if (!fabricCanvas) return null;
+
+    return {
+      scale: scaled,
+      brightness: currentBrightness,
+      contrast: currentContrast,
+    };
+  }, [fabricCanvas, scaled, currentBrightness, currentContrast]);
 
   const addBackgroundTwibbon = useCallback(
     async (twibbonUrl: string, isBlur = false) => {
@@ -161,7 +216,7 @@ export const useTwibbonCanvas = (): UseTwibbonHookRes => {
           twibbonImage.applyFilters();
         }
 
-        fabricCanvas?.insertAt(0, twibbonImage);
+        fabricCanvas?.insertAt(2, twibbonImage);
         return true;
       } catch (error) {
         console.error("Failed to load twibbon image:", error);
@@ -214,18 +269,23 @@ export const useTwibbonCanvas = (): UseTwibbonHookRes => {
         });
 
         frameImage.filters = [
-          ...(frameImage.filters || []),
-          new fabric.filters.Brightness(),
-          new fabric.filters.Contrast(),
+          new fabric.filters.Brightness({ brightness: 0 }),
+          new fabric.filters.Contrast({ contrast: 0 }),
         ];
 
         frameImage.applyFilters();
 
         removeFabricObject(prevId);
         fabricCanvas?.centerObject(frameImage);
-        fabricCanvas?.insertAt(2, frameImage);
+        fabricCanvas?.insertAt(0, frameImage);
+
+        setCurrentBrightness(0);
+        setCurrentContrast(0);
+
+        return Promise.resolve();
       } catch (error) {
         console.error("Failed to load frame image:", error);
+        return Promise.reject(error);
       }
     },
     [fabricCanvas, removeFabricObject],
@@ -335,5 +395,8 @@ export const useTwibbonCanvas = (): UseTwibbonHookRes => {
     },
     setScaled,
     scaled,
+    applyImageFilters,
+    resetCanvas,
+    getCurrentImageState,
   };
 };
