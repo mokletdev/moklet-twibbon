@@ -182,7 +182,7 @@ export default function Form({ searchParams }: Readonly<Props>) {
   );
 
   useEffect(() => {
-    const clipboard = new ClipboardJS("#copy-btn");
+    const clipboard = new ClipboardJS(".copy-btn");
 
     clipboard.on("success", (e) => {
       toast.success("Caption copied successfully!");
@@ -298,7 +298,7 @@ export default function Form({ searchParams }: Readonly<Props>) {
       )}
       <div
         className={cn(
-          "relative flex justify-center items-center flex-col space-y-4 w-full rounded-lg overflow-hidden transition-all duration-300 group",
+          "z-[1000] relative flex justify-center items-center flex-col space-y-4 w-full rounded-lg overflow-hidden transition-all duration-300 group",
           isDragging
             ? "bg-blue-50 border-2 border-dashed border-blue-300 scale-[0.99]"
             : fileName
@@ -319,10 +319,7 @@ export default function Form({ searchParams }: Readonly<Props>) {
         />
 
         {!fileName && (
-          <div
-            onClick={handleUploadClick}
-            className="absolute inset-0 flex items-center justify-center bg-gray-50 bg-opacity-60 transition-opacity group-hover:bg-opacity-90 pointer-events-none cursor-pointer"
-          >
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-50 bg-opacity-60 transition-opacity group-hover:bg-opacity-90 cursor-pointer">
             <div className="text-center p-6 rounded-xl transition-all duration-300 transform group-hover:scale-105">
               <div className="mb-3 bg-primary-100 text-primary-500 rounded-full p-3 inline-block">
                 <FaFileImage size={24} />
@@ -520,9 +517,8 @@ export default function Form({ searchParams }: Readonly<Props>) {
         </Button>
         {searchParams?.caption && (
           <Button
-            id="copy-btn"
             variant="quartiary"
-            className="flex items-center gap-2 !py-3 !px-6 shadow hover:shadow-md !rounded-lg transition-all duration-200 transform hover:translate-y-[-2px]"
+            className="copy-btn flex items-center gap-2 !py-3 !px-6 shadow hover:shadow-md !rounded-lg transition-all duration-200 transform hover:translate-y-[-2px]"
             data-clipboard-text={searchParams.caption}
             data-clipboard-action="copy"
             disabled={isLoading}
@@ -533,7 +529,9 @@ export default function Form({ searchParams }: Readonly<Props>) {
         <Button
           onClick={handleShare}
           variant="secondary"
-          className="flex items-center gap-2 !py-3 !px-6 shadow hover:shadow-md !rounded-lg transition-all duration-200 transform hover:translate-y-[-2px]"
+          className="copy-btn flex items-center gap-2 !py-3 !px-6 shadow hover:shadow-md !rounded-lg transition-all duration-200 transform hover:translate-y-[-2px]"
+          data-clipboard-text={searchParams.caption}
+          data-clipboard-action="copy"
           disabled={!fileName || isLoading}
         >
           <FaShare /> Share
