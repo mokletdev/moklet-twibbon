@@ -346,7 +346,7 @@ const TwibbonFormContent = ({
     if (!!frameUrl) {
       const objectsCount = canvasHook.fabricCanvas?.getObjects().length;
 
-      if (objectsCount === undefined || objectsCount < 1) {
+      if (objectsCount === undefined || objectsCount === 0) {
         setIsLoading(true);
         canvasHook
           .addBackground(frameUrl)

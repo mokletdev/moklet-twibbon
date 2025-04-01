@@ -15,9 +15,7 @@ export default function SlugPage() {
 
     if (!params) setIsNotFound(true);
     else {
-      const searchParams = JSON.parse(params) as Required<
-        Props["searchParams"]
-      >;
+      const searchParams = JSON.parse(params) as Props["searchParams"];
 
       router.push(`/go?${new URLSearchParams(searchParams).toString()}`);
     }
