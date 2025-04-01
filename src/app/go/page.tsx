@@ -1,6 +1,7 @@
+import { Props } from "@/hooks/useValidateFrameUrl";
 import { Metadata } from "next";
 import { H2 } from "../_components/global/text";
-import RenderForm, { Props } from "./_components/render-form";
+import TwibbonForm from "./_components/form";
 
 interface MetadataProps {
   searchParams: { [key: string]: string | string[] | undefined };
@@ -17,8 +18,10 @@ export function generateMetadata({ searchParams }: MetadataProps): Metadata {
 export default function GoPage({ searchParams }: Readonly<Props>) {
   return (
     <section className="py-6 flex justify-center items-center flex-col space-y-4 md:space-y-6">
-      <H2>{searchParams?.title ?? "Twibbon"}</H2>
-      <RenderForm searchParams={searchParams} />
+      <H2 className="text-primary-500">
+        {searchParams?.title ?? "Custom Twibbon"}
+      </H2>
+      <TwibbonForm searchParams={searchParams} />
     </section>
   );
 }
