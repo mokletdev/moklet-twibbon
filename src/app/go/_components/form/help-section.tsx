@@ -41,7 +41,7 @@ const HelpSection = () => {
 
   return (
     <section
-      className="mt-6 text-center bg-gradient-to-r from-primary-50 to-blue-50 p-6 rounded-xl shadow-sm"
+      className="mt-6 text-center p-6 rounded-xl shadow-sm"
       aria-labelledby="help-section-title"
     >
       <h2
