@@ -1,7 +1,7 @@
 "use client";
 
 import { H1 } from "@/app/_components/global/text";
-import { useTwibbonCanvas } from "@/hooks/useTwibbonCanvas";
+import { OBJECT_NAMES, useTwibbonCanvas } from "@/hooks/useTwibbonCanvas";
 import ClipboardJS from "clipboard";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -344,9 +344,11 @@ const TwibbonFormContent = ({
     }
 
     if (!!frameUrl) {
-      const objectsCount = canvasHook.fabricCanvas?.getObjects().length;
+      const hasBackground = canvasHook.fabricCanvas
+        ?.getObjects()
+        .some((obj) => (obj as any).name === OBJECT_NAMES.BACKGROUND);
 
-      if (objectsCount === undefined || objectsCount === 0) {
+      if (!hasBackground) {
         setIsLoading(true);
         canvasHook
           .addBackground(frameUrl)
