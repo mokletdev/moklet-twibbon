@@ -59,3 +59,13 @@ Technologies used in the project:
 *   Next.Js
 *   MySQL
 *   Prisma
+
+
+<h2>🌐 Supported by:</h2>
+
+<p align="center">
+  <a href="https://www.netlify.com/" target="_blank">
+    <img src="https://res.cloudinary.com/projectsben/image/upload/v1736730123/storage/m6rrhk5ijqrsub55ptue.svg" alt="Netlify Logo" width="100">
+  </a>
+</p>
+

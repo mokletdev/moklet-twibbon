@@ -1,7 +1,9 @@
 "use client";
+
+import { Props } from "@/hooks/useValidateFrameUrl";
+import { notFound, useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useRouter, notFound, useParams } from "next/navigation";
-import { H1 } from "../_components/global/text";
+import LoadingOverlay from "../go/_components/form/loading-overlay";
 
 export default function SlugPage() {
   const [isNotFound, setIsNotFound] = useState(false);
@@ -9,15 +11,17 @@ export default function SlugPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const getStorage = localStorage.getItem(slug as string);
-    if (!getStorage) setIsNotFound(true);
+    const params = localStorage.getItem(slug as string);
+
+    if (!params) setIsNotFound(true);
     else {
-      const data = JSON.parse(getStorage);
-      router.push(`/go?${new URLSearchParams(data).toString()}`);
+      const searchParams = JSON.parse(params) as Props["searchParams"];
+
+      router.push(`/go?${new URLSearchParams(searchParams).toString()}`);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
-  return isNotFound ? notFound() : <H1 className="text-center">Loading...</H1>;
+  return isNotFound ? notFound() : <LoadingOverlay isLoading />;
 }

@@ -12,6 +12,8 @@
     "class-variance-authority": "^0.7.0",
     "clipboard": "^2.0.11",
     "fabric": "^6.0.2",
+    "lucide-react": "^0.487.0",
+    "motion": "^12.6.2",
     "next": "14.2.4",
     "react": "^18",
     "react-dom": "^18",
