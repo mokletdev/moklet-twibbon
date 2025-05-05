@@ -38,7 +38,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
         <Button
           variant="quartiary"
           className="copy-btn flex items-center gap-2 !py-3 !px-6 shadow hover:shadow-md !rounded-lg transition-all duration-200 transform hover:translate-y-[-2px]"
-          data-clipboard-text={caption}
+          data-clipboard-text={decodeURIComponent(caption)}
           data-clipboard-action="copy"
           disabled={isLoading}
         >
