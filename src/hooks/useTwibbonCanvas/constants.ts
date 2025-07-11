@@ -19,8 +19,8 @@ export const DEFAULT_CANVAS_SIZE = {
  * Default canvas size for mobile devices (pixels)
  */
 export const MOBILE_CANVAS_SIZE = {
-  width: 600,
-  height: 750,
+  width: 300,
+  height: 375,
 };
 /**
  * Default scale factor for frame images (0-1)

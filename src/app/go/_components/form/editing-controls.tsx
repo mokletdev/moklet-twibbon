@@ -21,7 +21,7 @@ interface EditingControlsProps {
 const EditingControls: React.FC<EditingControlsProps> = ({ scale, brightness, contrast, historyIndex, editHistoryLength, isLoading, onScaleChange, onBrightnessChange, onContrastChange, onUndo, onRedo, onChangeImage }) => {
   return (
     <>
-      <div className="flex justify-center gap-3 mt-2">
+      <div className="flex justify-center gap-3 lg:mt-2">
         <Button variant="quartiary" onClick={onUndo} disabled={historyIndex <= 0 || isLoading} className="!rounded-md !px-3 !py-2 shadow-sm hover:shadow transition-all duration-200" title="Undo">
           <FaUndo />
         </Button>

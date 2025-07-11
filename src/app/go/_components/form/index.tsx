@@ -62,9 +62,7 @@ export default function TwibbonForm({ searchParams }: Readonly<Props>) {
 /**
  * Main content component for the Twibbon form
  */
-const TwibbonFormContent = ({
-  searchParams,
-}: Readonly<{ searchParams: Props["searchParams"] }>) => {
+const TwibbonFormContent = ({ searchParams }: Readonly<{ searchParams: Props["searchParams"] }>) => {
   const frameUrl = useMemo(() => {
     const { frameUrl } = searchParams;
     if (!frameUrl) return localStorage.getItem("customFrameUrl");
@@ -82,9 +80,7 @@ const TwibbonFormContent = ({
   const [brightness, setBrightness] = useState<number>(0);
   const [contrast, setContrast] = useState<number>(0);
   const [historyIndex, setHistoryIndex] = useState<number>(0);
-  const [editHistory, setEditHistory] = useState<EditHistoryItem[]>([
-    { scale: 1, brightness: 0, contrast: 0 },
-  ]);
+  const [editHistory, setEditHistory] = useState<EditHistoryItem[]>([{ scale: 1, brightness: 0, contrast: 0 }]);
 
   // Image filter application
   const applyImageFilters = useCallback(
@@ -110,11 +106,7 @@ const TwibbonFormContent = ({
   const handleUndo = useCallback(() => {
     if (historyIndex > 0) {
       const newIndex = historyIndex - 1;
-      const {
-        scale: prevScale,
-        brightness: prevBrightness,
-        contrast: prevContrast,
-      } = editHistory[newIndex];
+      const { scale: prevScale, brightness: prevBrightness, contrast: prevContrast } = editHistory[newIndex];
 
       setScale(prevScale);
       setBrightness(prevBrightness);
@@ -128,11 +120,7 @@ const TwibbonFormContent = ({
   const handleRedo = useCallback(() => {
     if (historyIndex < editHistory.length - 1) {
       const newIndex = historyIndex + 1;
-      const {
-        scale: nextScale,
-        brightness: nextBrightness,
-        contrast: nextContrast,
-      } = editHistory[newIndex];
+      const { scale: nextScale, brightness: nextBrightness, contrast: nextContrast } = editHistory[newIndex];
 
       setScale(nextScale);
       setBrightness(nextBrightness);
@@ -212,9 +200,7 @@ const TwibbonFormContent = ({
       setIsLoading(true);
 
       try {
-        await canvasHook.addFrame(
-          URL.createObjectURL(ev.currentTarget.files[0])
-        );
+        await canvasHook.addFrame(URL.createObjectURL(ev.currentTarget.files[0]));
 
         setEditHistory([{ scale, brightness: 0, contrast: 0 }]);
         setHistoryIndex(0);
@@ -279,11 +265,7 @@ const TwibbonFormContent = ({
 
       const response = await fetch(imageData);
       const blob = await response.blob();
-      const imageFile = new File(
-        [blob],
-        `Twibbon ${searchParams?.title ?? "Moklet"}.jpg`,
-        { type: "image/jpeg" }
-      );
+      const imageFile = new File([blob], `Twibbon ${searchParams?.title ?? "Moklet"}.jpg`, { type: "image/jpeg" });
 
       const shareData: ShareData = {
         files: [imageFile],
@@ -344,9 +326,7 @@ const TwibbonFormContent = ({
     }
 
     if (!!frameUrl) {
-      const hasBackground = canvasHook.fabricCanvas
-        ?.getObjects()
-        .some((obj) => (obj as any).name === OBJECT_NAMES.BACKGROUND);
+      const hasBackground = canvasHook.fabricCanvas?.getObjects().some((obj) => (obj as any).name === OBJECT_NAMES.BACKGROUND);
 
       if (!hasBackground) {
         setIsLoading(true);
@@ -371,18 +351,19 @@ const TwibbonFormContent = ({
   return (
     <div className="flex flex-col gap-4 bg-white p-4 rounded-md shadow-sm">
       <LoadingOverlay isLoading={isLoading} />
-
-      <UploadArea
-        isDragging={isDragging}
-        fileName={fileName}
-        canvasRef={canvasHook.canvasRef}
-        canvasWidth={canvasHook.recommendedSize.width}
-        canvasHeight={canvasHook.recommendedSize.height}
-        onDrop={handleDrop}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onClick={handleUploadClick}
-      />
+      <div className="px-4 w-full max-w-[500px] lg:max-w-full mx-auto">
+        <UploadArea
+          isDragging={isDragging}
+          fileName={fileName}
+          canvasRef={canvasHook.canvasRef}
+          canvasWidth={canvasHook.recommendedSize.width}
+          canvasHeight={canvasHook.recommendedSize.height}
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onClick={handleUploadClick}
+        />
+      </div>
 
       {fileName && (
         <EditingControls
@@ -403,14 +384,7 @@ const TwibbonFormContent = ({
 
       <HiddenFileInput onChange={handleFileUpload} />
 
-      <ActionButtons
-        fileName={fileName}
-        isDownloading={isDownloading}
-        isLoading={isLoading}
-        caption={searchParams?.caption}
-        onDownload={handleDownload}
-        onShare={handleShare}
-      />
+      <ActionButtons fileName={fileName} isDownloading={isDownloading} isLoading={isLoading} caption={searchParams?.caption} onDownload={handleDownload} onShare={handleShare} />
 
       {!fileName && <HelpSection />}
     </div>
