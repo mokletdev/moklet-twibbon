@@ -18,13 +18,7 @@ import {
   OBJECT_NAMES,
 } from "./constants";
 
-import {
-  configureBackgroundImage,
-  configureFrameImage,
-  extendFabricPrototype,
-  loadImage,
-  removeFabricObject,
-} from "./utils";
+import { configureBackgroundImage, configureFrameImage, extendFabricPrototype, loadImage, removeFabricObject } from "./utils";
 
 /**
  * A custom React hook that provides a canvas-based twibbon editor
@@ -43,13 +37,11 @@ export const useTwibbonCanvas = (): UseTwibbonHookRes => {
   const [frameUrl, setFrameUrl] = useState<string>();
   const [lastTwb, setLastTwb] = useState<string>();
   const [scaled, setScaled] = useState<number>(DEFAULT_SCALE);
-  const [currentBrightness, setCurrentBrightness] =
-    useState<number>(DEFAULT_FILTER_VALUE);
-  const [currentContrast, setCurrentContrast] =
-    useState<number>(DEFAULT_FILTER_VALUE);
+  const [currentBrightness, setCurrentBrightness] = useState<number>(DEFAULT_FILTER_VALUE);
+  const [currentContrast, setCurrentContrast] = useState<number>(DEFAULT_FILTER_VALUE);
   const [recommendedSize, setRecommendedSize] = useState<CanvasDimensions>({
-    height: DEFAULT_CANVAS_SIZE,
-    width: DEFAULT_CANVAS_SIZE,
+    height: DEFAULT_CANVAS_SIZE.height,
+    width: DEFAULT_CANVAS_SIZE.width,
   });
 
   // Media queries
@@ -76,13 +68,13 @@ export const useTwibbonCanvas = (): UseTwibbonHookRes => {
       // Calculate dimensions while preserving aspect ratio
       if (aspectRatio > 1) {
         return {
-          width: maxSize,
-          height: maxSize / aspectRatio,
+          width: maxSize.width,
+          height: maxSize.height / aspectRatio,
         };
       } else {
         return {
-          height: maxSize,
-          width: maxSize * aspectRatio,
+          height: maxSize.height,
+          width: maxSize.width * aspectRatio,
         };
       }
     },
@@ -107,7 +99,7 @@ export const useTwibbonCanvas = (): UseTwibbonHookRes => {
     });
 
     const maxSize = getMaxCanvasSize();
-    canvas.setDimensions({ width: maxSize, height: maxSize });
+    canvas.setDimensions({ width: maxSize.width, height: maxSize.height });
 
     return canvas;
   }, [getMaxCanvasSize]);
@@ -144,10 +136,7 @@ export const useTwibbonCanvas = (): UseTwibbonHookRes => {
       for (const obj of objects) {
         if ((obj as any).name === OBJECT_NAMES.FRAME) {
           const imgObj = obj as fabric.Image;
-          imgObj.filters = [
-            new fabric.filters.Brightness({ brightness }),
-            new fabric.filters.Contrast({ contrast }),
-          ];
+          imgObj.filters = [new fabric.filters.Brightness({ brightness }), new fabric.filters.Contrast({ contrast })];
           imgObj.applyFilters();
           fabricCanvas.renderAll();
           break;
@@ -216,10 +205,7 @@ export const useTwibbonCanvas = (): UseTwibbonHookRes => {
 
         // Apply blur if needed
         if (isBlur) {
-          twibbonImage.filters = [
-            ...(twibbonImage.filters || []),
-            new fabric.filters.Blur({ blur: BACKGROUND_BLUR_AMOUNT }),
-          ];
+          twibbonImage.filters = [...(twibbonImage.filters || []), new fabric.filters.Blur({ blur: BACKGROUND_BLUR_AMOUNT })];
           twibbonImage.applyFilters();
         }
 
@@ -313,12 +299,9 @@ export const useTwibbonCanvas = (): UseTwibbonHookRes => {
       // Set dimensions based on aspect ratio
       let dimensions: CanvasDimensions;
       if (frameAspectRatioRef.current !== 1) {
-        dimensions =
-          frameAspectRatioRef.current > 1
-            ? { width: maxSize, height: maxSize / frameAspectRatioRef.current }
-            : { width: maxSize * frameAspectRatioRef.current, height: maxSize };
+        dimensions = frameAspectRatioRef.current > 1 ? { width: maxSize.width, height: maxSize.height / frameAspectRatioRef.current } : { width: maxSize.width * frameAspectRatioRef.current, height: maxSize.height };
       } else {
-        dimensions = { width: maxSize, height: maxSize };
+        dimensions = { width: maxSize.width, height: maxSize.height };
       }
 
       fabricCanvas.setDimensions(dimensions);
@@ -336,15 +319,7 @@ export const useTwibbonCanvas = (): UseTwibbonHookRes => {
 
     // Small delay to ensure the canvas is ready
     setTimeout(initializeCanvas, CANVAS_INIT_DELAY);
-  }, [
-    isDesktop,
-    fabricCanvas,
-    addBackgroundTwibbon,
-    addFrameTwibbon,
-    frameUrl,
-    lastTwb,
-    getMaxCanvasSize,
-  ]);
+  }, [isDesktop, fabricCanvas, addBackgroundTwibbon, addFrameTwibbon, frameUrl, lastTwb, getMaxCanvasSize]);
 
   /**
    * Update frame scaling when scale factor changes
@@ -352,9 +327,7 @@ export const useTwibbonCanvas = (): UseTwibbonHookRes => {
   useEffect(() => {
     if (!fabricCanvas) return;
 
-    const frameObjects = fabricCanvas
-      .getObjects()
-      .filter((obj: any) => obj.name === OBJECT_NAMES.FRAME);
+    const frameObjects = fabricCanvas.getObjects().filter((obj: any) => obj.name === OBJECT_NAMES.FRAME);
 
     if (frameObjects.length > 0) {
       const frameObj = frameObjects[0];

@@ -11,13 +11,17 @@ export const OBJECT_NAMES = {
 /**
  * Default canvas size for desktop devices (pixels)
  */
-export const DEFAULT_CANVAS_SIZE = 500;
-
+export const DEFAULT_CANVAS_SIZE = {
+  width: 1080,
+  height: 1350,
+};
 /**
  * Default canvas size for mobile devices (pixels)
  */
-export const MOBILE_CANVAS_SIZE = 300;
-
+export const MOBILE_CANVAS_SIZE = {
+  width: 600,
+  height: 750,
+};
 /**
  * Default scale factor for frame images (0-1)
  */
