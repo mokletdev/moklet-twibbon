@@ -249,6 +249,11 @@ export const useTwibbonCanvas = (): UseTwibbonHookRes => {
 
         frameImage.scaleToHeight(canvasHeight);
         frameImage.scaleToWidth(canvasWidth);
+        frameImage.set({
+          left: canvasWidth / 2,
+          top: canvasHeight / 2,
+        });
+
         (frameImage as any).name = OBJECT_NAMES.FRAME;
         setLastTwb(frameUrl);
 
@@ -342,9 +347,48 @@ export const useTwibbonCanvas = (): UseTwibbonHookRes => {
     }
   }, [scaled, fabricCanvas]);
 
+  const addUserImage = useCallback(
+    async (imageUrl: string): Promise<void> => {
+      if (!fabricCanvas) return;
+
+      try {
+        const img = await fabric.FabricImage.fromURL(
+          imageUrl,
+          { crossOrigin: "anonymous" },
+          {
+            hasControls: true,
+            hasBorders: false,
+            objectCaching: false,
+            originX: "center",
+            originY: "center",
+            selectable: true,
+          }
+        );
+
+        const canvasHeight = fabricCanvas.getHeight() ?? 0;
+        const canvasWidth = fabricCanvas.getWidth() ?? 0;
+
+        img.scaleToHeight(canvasHeight);
+        img.scaleToWidth(canvasWidth);
+        img.set({ left: canvasWidth / 2, top: canvasHeight / 2 });
+
+        (img as any).name = OBJECT_NAMES.BACKGROUND;
+
+        removeFabricObject(fabricCanvas, OBJECT_NAMES.BACKGROUND);
+        fabricCanvas.add(img);
+        fabricCanvas.moveObjectTo(img, 1); // Di antara background dan frame
+      } catch (error) {
+        console.error("Failed to load user image:", error);
+        throw error;
+      }
+    },
+    [fabricCanvas]
+  );
+
   return {
     canvasRef,
     fabricCanvas,
+    addUserImage,
     addFrame: addFrameTwibbon,
     addBackground: addBackgroundTwibbon,
     recommendedSize,

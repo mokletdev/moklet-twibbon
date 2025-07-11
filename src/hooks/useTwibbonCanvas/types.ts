@@ -33,6 +33,14 @@ export interface UseTwibbonHookRes {
   canvasRef: RefObject<HTMLCanvasElement>;
 
   /**
+   * Adds a user image to the canvas
+   * @param userImageUrl URL of the user image
+   * @returns A promise that resolves when the image is added
+   */
+
+  addUserImage: (userImageUrl: string) => Promise<void>;
+
+  /**
    * Adds a frame to the canvas
    * @param frameUrl URL of the frame image
    * @returns A promise that resolves when the frame is added

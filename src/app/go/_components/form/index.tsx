@@ -312,36 +312,29 @@ const TwibbonFormContent = ({ searchParams }: Readonly<{ searchParams: Props["se
 
   // Initialize canvas with frame
   useEffect(() => {
-    if (searchParams?.slug) {
-      const { slug, frameUrl } = searchParams;
+    const initializeFrame = async () => {
+      if (!canvasHook.fabricCanvas || !frameUrl) return;
 
-      window.history.pushState({}, "", `/${slug}`);
+      const hasBackground = canvasHook.fabricCanvas.getObjects().some((obj) => (obj as any).name === OBJECT_NAMES.BACKGROUND);
 
-      // Ensure frameUrl is not a data URI
-      if (frameUrl?.startsWith("data:")) {
-        searchParams.frameUrl = undefined;
-      }
+      if (hasBackground) return;
 
-      localStorage.setItem(slug, JSON.stringify(searchParams));
-    }
-
-    if (!!frameUrl) {
-      const hasBackground = canvasHook.fabricCanvas?.getObjects().some((obj) => (obj as any).name === OBJECT_NAMES.BACKGROUND);
-
-      if (!hasBackground) {
+      try {
         setIsLoading(true);
-        canvasHook
-          .addBackground(frameUrl)
-          .then(() => setIsLoading(false))
-          .catch((error) => {
-            console.error(error);
-
-            setIsLoading(false);
-            toast.error("Failed to load frame. Please try again.");
-          });
+        await canvasHook.addBackground(frameUrl);
+      } catch (error) {
+        console.error("Failed to load background:", error);
+        toast.error("Failed to load frame. Please try again.");
+      } finally {
+        setIsLoading(false);
       }
-    }
-  }, [canvasHook, frameUrl, searchParams]);
+    };
+
+    // Delay for safety in hydration/render timing
+    const timeout = setTimeout(initializeFrame, 50);
+
+    return () => clearTimeout(timeout);
+  }, [canvasHook.fabricCanvas, frameUrl]);
 
   // Update canvas when scale changes
   useEffect(() => {
